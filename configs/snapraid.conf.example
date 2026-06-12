@@ -1,0 +1,56 @@
+# SnapRAID Configuration — Example
+#
+# Replace all <PLACEHOLDER> values with your actual drive UUIDs.
+# Find UUIDs with: lsblk -f   or   sudo blkid
+#
+# This setup:
+#   - 3 data drives (NAS-grade SSDs in mergerfs pool)
+#   - 1 parity drive (secondary/consumer SSD)
+#
+# Copy this file to /etc/snapraid.conf and edit before first sync.
+
+# ---------------------------------------------------------------------------
+# PARITY — written to the secondary SSD
+# Must be on a drive NOT in the data array
+# ---------------------------------------------------------------------------
+parity /srv/dev-disk-by-uuid-<PARITY-DRIVE-UUID>/snapraid/snapraid.parity
+
+# ---------------------------------------------------------------------------
+# CONTENT — SnapRAID metadata files
+# Keep copies on multiple drives for redundancy
+# ---------------------------------------------------------------------------
+content /var/snapraid/snapraid.content
+content /srv/dev-disk-by-uuid-<NAS-DRIVE-1-UUID>/snapraid.content
+content /srv/dev-disk-by-uuid-<NAS-DRIVE-2-UUID>/snapraid.content
+
+# ---------------------------------------------------------------------------
+# DATA DISKS — the drives you want to protect
+# ---------------------------------------------------------------------------
+data d1 /srv/dev-disk-by-uuid-<NAS-DRIVE-1-UUID>/
+data d2 /srv/dev-disk-by-uuid-<NAS-DRIVE-2-UUID>/
+data d3 /srv/dev-disk-by-uuid-<NAS-DRIVE-3-UUID>/
+
+# ---------------------------------------------------------------------------
+# EXCLUSIONS — files/folders to skip during sync
+# ---------------------------------------------------------------------------
+exclude *.unrecoverable
+exclude /tmp/
+exclude /lost+found/
+exclude *.!sync
+exclude .AppleDouble
+exclude .DS_Store
+exclude .Thumbs.db
+exclude .fseventsd
+exclude .Spotlight-V100
+exclude .TemporaryItems
+exclude .Trashes
+
+# ---------------------------------------------------------------------------
+# PERFORMANCE SETTINGS
+# ---------------------------------------------------------------------------
+
+# Block size in KB — 256 is a good default for SSDs
+block_size 256
+
+# Auto-save state every N GB processed (prevents restart from scratch if interrupted)
+autosave 500

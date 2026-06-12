@@ -1,0 +1,62 @@
+# Samba Configuration — Example
+#
+# OMV manages /etc/samba/smb.conf automatically via the web UI.
+# This file documents the key settings for reference.
+#
+# To configure SMB in OMV: Services → SMB/CIFS → Settings and Shares
+
+[global]
+   workgroup = WORKGROUP
+   server string = Pi5 NAS
+   log level = 1
+   max log size = 1000
+
+   # Security
+   server role = standalone server
+   security = user
+   map to guest = Never
+   guest ok = no
+
+   # Performance
+   socket options = TCP_NODELAY IPTOS_LOWDELAY SO_RCVBUF=131072 SO_SNDBUF=131072
+   read raw = yes
+   write raw = yes
+   strict locking = no
+   min receivefile size = 16384
+
+   # macOS compatibility
+   fruit:aapl = yes
+   vfs objects = catia fruit streams_xattr
+
+# ---------------------------------------------------------------------------
+# SHARE DEFINITIONS
+# Each [ShareName] block defines one network share.
+# Replace paths with your actual mount paths.
+# ---------------------------------------------------------------------------
+
+[Documents]
+   comment = Personal Documents
+   path = /srv/mergerfs/storage-pool/Documents
+   valid users = <YOUR_USERNAME>
+   read only = no
+   browseable = yes
+   create mask = 0664
+   directory mask = 0775
+
+[Photos]
+   comment = Photo Library
+   path = /srv/mergerfs/storage-pool/Photos
+   valid users = <YOUR_USERNAME>
+   read only = no
+   browseable = yes
+   create mask = 0664
+   directory mask = 0775
+
+[Media]
+   comment = Media Files
+   path = /srv/mergerfs/storage-pool/Media
+   valid users = <YOUR_USERNAME>
+   read only = no
+   browseable = yes
+   create mask = 0664
+   directory mask = 0775
