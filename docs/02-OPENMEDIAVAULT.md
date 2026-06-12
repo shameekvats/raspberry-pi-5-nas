@@ -143,7 +143,7 @@ After OMV installation, verify that OMV knows about `end0`:
 2. The interface listed should be `end0`
 3. If it shows `eth0`, click the interface, change the name to `end0`, and save
 
-If you ever need to recover from a broken network config, see [Troubleshooting](10-TROUBLESHOOTING.md#network-recovery-eth0-vs-end0).
+If you ever need to recover from a broken network config, SSH into the Pi, edit `/etc/network/interfaces` or restore the OMV config backup, then run `sudo omv-salt deploy run network`.
 
 ---
 
